@@ -10,15 +10,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
+    EditText login_id, login_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toast.makeText(getApplicationContext(), "Login 화면", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Login 화면", Toast.LENGTH_SHORT).show(); //확인용 토스트
 
-        EditText login_id = (EditText) findViewById(R.id.editText_id);
-        EditText login_name = (EditText) findViewById(R.id.editText_name);
+        login_id = (EditText) findViewById(R.id.editText_id);
+        login_name = (EditText) findViewById(R.id.editText_name);
 
+        //가입 페이지로 전환
         Button button_join = (Button) findViewById(R.id.button_join);
         button_join.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -44,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void checkLoginInfo(){
         //check login Info with DB
-
+        Toast.makeText(getApplicationContext(), "로그인 정보 확인함.", Toast.LENGTH_SHORT).show(); //확인용 토스트
 
     }
 }

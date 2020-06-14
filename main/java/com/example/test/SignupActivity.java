@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static android.R.style.Theme_DeviceDefault_Light_Dialog;
+
 public class SignupActivity extends AppCompatActivity {
 
     Button button_back, button_checkbox, button_join, button_check;
@@ -65,7 +67,12 @@ public class SignupActivity extends AppCompatActivity {
         button_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IDcheckAvail();
+                // 중복체크됨.
+                if(IDcheckAvail() == 1) {
+                    Toast.makeText(SignupActivity.this, "아이디 중복!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SignupActivity.this, "아이디 사용 가능!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -125,12 +132,15 @@ public class SignupActivity extends AppCompatActivity {
 
     void passInfoToDB(){
         //가입 버튼 누를시, 입력된 정보들 DB로 넘김
+        if(IDcheckAvail() == 1){
 
+        }
     }
 
-    void IDcheckAvail(){
+    int IDcheckAvail(){
         //아이디 중복체크
 
+        return 1;
     }
 }
 
