@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     boolean isRunning = false;
     // 서버와 연결되어있는 소켓 객체
     Socket member_socket;
-    // 사용자 닉네임( 내 닉넴과 일치하면 내가보낸 말풍선으로 설정 아니면 반대설정)
+    // 사용자 닉네임
     String user_id;
     // 로그인 성공 여부
     boolean isLogin = false;
@@ -59,12 +59,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("로그인 버튼 눌림");
                 btnMethod(button_login);
-                if(isLogin == true) {
-
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "로그인X", Toast.LENGTH_SHORT).show(); //확인용 토스트
-
             }
         });
     }
@@ -75,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         if (isConnect == false) {   //접속전
             //사용자가 입력한 닉네임을 받는다.
             String nickName = login_id.getText().toString();
-            System.out.println("접속 전 " + nickName);///
+            System.out.println("접속 전 //" + nickName);///
             if (nickName.length() > 0 && nickName != null) {
                 //서버에 접속한다.
                 pro = ProgressDialog.show(this, null, "접속중입니다");
@@ -95,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {                  // 접속 후
             // 입력한 문자열을 가져온다.
             String msg = login_id.getText().toString();
-            System.out.println("접속완료" + msg);
+            System.out.println("접속완료//" + msg);
             // 송신 스레드 가동
             SendToServerThread thread = new SendToServerThread(member_socket, msg);
             thread.start();
@@ -109,18 +103,20 @@ public class LoginActivity extends AppCompatActivity {
         public void run() {
             try {
                 // 접속한다.
-                final Socket socket = new Socket("172.30.1.22", 30000);
+                final Socket socket = new Socket("192.168.1.4", 30000);
                 member_socket = socket;
                 System.out.println("소켓 생성 " +  member_socket);
                 // 미리 입력했던 닉네임을 서버로 전달한다.
                 String nickName = login_id.getText().toString();
-                user_id = nickName;     // 화자에 따라 말풍선을 바꿔주기위해
+                String usrName = login_name.getText().toString();
+                user_id = nickName;
                 // 스트림을 추출
                 OutputStream os = socket.getOutputStream();
                 DataOutputStream dos = new DataOutputStream(os);
                 // 닉네임을 송신한다.
                 dos.writeUTF(nickName);
-                System.out.println("학번 서버로 보냄 " + nickName);
+                dos.writeUTF(usrName);
+                System.out.println("학번, 이름 서버로 보냄 //" + nickName +  usrName);
                 // ProgressDialog 를 제거한다.
                 runOnUiThread(new Runnable() {
                     @Override
@@ -130,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                         isConnect = true;
                         // 메세지 수신을 위한 스레드 가동
                         isRunning = true;
-                        System.out.println("isConnect isRunning = True");
+                        System.out.println("접속완료, 수신 스레드 가동//");
                         MessageThread thread = new MessageThread(socket);
                         thread.start();
                     }
@@ -151,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                 this.socket = socket;
                 InputStream is = socket.getInputStream();
                 dis = new DataInputStream(is);
-                System.out.println("inputStream 생성");
+                System.out.println("inputStream 수신 스트림 생성//");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -163,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                 while (isRunning) {
                     // 서버로부터 데이터를 수신받는다.
                     final String msg = dis.readUTF();
-                    System.out.println("서버로부터 데이터 수신 " + msg);
+                    System.out.println("서버로부터 수신된 데이터는 //" + msg);
                     // 화면에 출력
                     runOnUiThread(new Runnable() {
                         @Override
@@ -214,7 +210,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // 서버로 데이터를 보낸다.
                 dos.writeUTF(msg);
-                System.out.println("서버로 데이터 보냄 " + msg);
+                System.out.println("서버로 데이터 보냄 //" + msg);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -226,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
+/*
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -238,4 +234,6 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+ */
 }

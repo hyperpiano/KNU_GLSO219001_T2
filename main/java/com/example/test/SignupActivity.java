@@ -1,20 +1,31 @@
 package com.example.test;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 public class SignupActivity extends AppCompatActivity {
 
     Button button_back, button_checkbox, button_join, button_check;
-
+    EditText id, name;
+    Socket member_socket;
+    boolean isConnect;
+    boolean isRunning;
     //선택 항목 표시
     String[] items = {"북문", "동문", "정문", "쪽문", "서문"};
     boolean[] state = {false, false, false, false, false};
@@ -42,7 +53,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showMultiChoiceDialog();
-
             }
         });
 
@@ -51,7 +61,8 @@ public class SignupActivity extends AppCompatActivity {
         button_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                passInfoToDB();
+                System.out.println("가입 버튼 눌림");
+                //btnMethod(button_join);
 
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -88,7 +99,7 @@ public class SignupActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
 
-        builder.setTitle("자주 방문하는 문을 선택하세요.");
+        builder.setTitle("자주 방문하는 문을 하나 선택하세요.");
         builder.setIcon(R.mipmap.ic_launcher);
 
         builder.setMultiChoiceItems(items, state, new DialogInterface.OnMultiChoiceClickListener(){
@@ -139,5 +150,6 @@ public class SignupActivity extends AppCompatActivity {
 
         return 1;
     }
+
 }
 
