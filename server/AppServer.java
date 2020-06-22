@@ -8,15 +8,12 @@ import java.sql.*;
 
 public class AppServer {
 	
-	public final static String select = "SELECT";
-	public final static String delete = "DELETE";
-	public final static String update = "UPDATE";
-	
 	public ServerSocket serverSocket = null;
 	public Socket clientSocket = null;
 	
 	public BufferedReader clientRequest;
 	public ObjectOutputStream outStream;
+	public DBQuery DB;
 	public String requestLine;
 	public ResultSet result;
 	
@@ -38,20 +35,10 @@ public class AppServer {
 		
 		clientRequest = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		outStream = new ObjectOutputStream(clientSocket.getOutputStream());
+		DB = new DBQuery();
 		
 		while((requestLine = clientRequest.readLine()) != null) {
-			if(requestLine.indexOf(select) != -1) {
-				result = DBQuery.selectData(requestLine);
-			}
-			else if (requestLine.indexOf(delete) != -1) {
-				result = DBQuery.deleteData(requestLine);
-			}
-			else if (requestLine.indexOf(update) != -1) {
-				result = DBQuery.updateData(requestLine);
-			}
-			else {
-				result = null;
-			}
+			result = DB.DataQuery(requestLine);
 			outStream.writeObject(result);
 			outStream.flush();
 		}
